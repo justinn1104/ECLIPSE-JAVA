@@ -1,7 +1,7 @@
 package EjemploHerencia;
 
 public abstract class Animal {
-	protected String nameAnimal;
+	protected String nameAnimal;//modificador de acceso "protected"
 	protected String raceAnimal;
 	protected int ageAnimal;
 	
