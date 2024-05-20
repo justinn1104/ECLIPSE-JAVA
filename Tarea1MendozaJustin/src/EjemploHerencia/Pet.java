@@ -1,7 +1,7 @@
 package EjemploHerencia;
 
 public class Pet extends Animal{
-	private String ColorPet;
+	private String ColorPet;//modificador de acceso "private"
 	private float WeinghtPet;
 	private float SizePet;
 	
