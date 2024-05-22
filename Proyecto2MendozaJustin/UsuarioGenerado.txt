@@ -1,0 +1,8 @@
+
+	USUARIO
+
+Nombres: sdfgh asdfgh
+	Tarjeta 'asdfg'
+Numero: 1234567899   CVV: 123
+Clave: 1235
+
