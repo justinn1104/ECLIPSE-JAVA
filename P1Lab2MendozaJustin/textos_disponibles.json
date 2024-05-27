@@ -1,0 +1,58 @@
+[
+    {
+        "Nombre": "Nacho",
+        "Tipo": "Cuento",
+        "Cantidad": 2,
+        "Autor": "Justin Medoza",
+        "ID": "cue20180",
+        "Año": 2018
+    },
+    {
+        "Nombre": "Paton",
+        "Tipo": "Cuento",
+        "Cantidad": 3,
+        "Autor": "Justin Medoza",
+        "ID": "cue20151",
+        "Año": 2015
+    },
+    {
+        "Nombre": "Ducke",
+        "Tipo": "Cuento",
+        "Cantidad": 4,
+        "Autor": "Justin Medoza",
+        "ID": "cue20202",
+        "Año": 2020
+    },
+    {
+        "Nombre": "Lancha",
+        "Tipo": "Cuento",
+        "Cantidad": 1,
+        "Autor": "Justin Medoza",
+        "ID": "cue20223",
+        "Año": 2022
+    },
+    {
+        "Nombre": "Carlin",
+        "Tipo": "Cuento",
+        "Cantidad": 5,
+        "Autor": "Justin Medoza",
+        "ID": "cue20234",
+        "Año": 2023
+    },
+    {
+        "Nombre": "LokaLoka",
+        "Tipo": "Novela",
+        "Cantidad": 5,
+        "Autor": "Andres",
+        "ID": "nov19980",
+        "Año": 1998
+    },
+    {
+        "Nombre": "CarbonFino",
+        "Tipo": "Comic",
+        "Cantidad": 5,
+        "Autor": "Kishimoto",
+        "ID": "com20240",
+        "Año": 2024
+    }
+]

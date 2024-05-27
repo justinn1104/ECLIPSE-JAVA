@@ -1,0 +1,8 @@
+
+Nombre: Justin
+	**Tiket pedido**
+Articulo: Nacho
+Tipo: Cuento
+Codigo: cue20180
+Cantidad: 1
+Año: 2018
