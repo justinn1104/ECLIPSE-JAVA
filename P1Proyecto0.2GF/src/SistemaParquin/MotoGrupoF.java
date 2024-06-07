@@ -1,36 +1,4 @@
 package SistemaParquin;
-
-import java.util.Scanner;
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.FileReader;
-
-public class MotoGrupoF extends ParqueaderoGrupoF {
-	static Scanner cin = new Scanner(System.in);
-	public MotoGrupoF(String tipoVeiculo, String fechaHora, String espacioSelecc, String numPlaca, String nombreUser, String telefono, String direccion) {
-		super(tipoVeiculo, fechaHora, espacioSelecc, numPlaca, nombreUser, telefono, direccion);
-	}
-	@Override
-	public void GenerarTiket() {
-		System.out.print("INGRESA EL NOMBRE DEL USUARIO [MAX. CARACTER. 10]: ");
-		nombreUser = cin.nextLine();
-		while(nombreUser.length()>10) {
-			System.out.print("**VUELVA A INGRESAR EL NOMBRE DEL USUARIO [MAX. CARACTER. 10]**: ");
-			nombreUser = cin.nextLine();
-		}
-		System.out.print("INGRESA EL MODELO DE LA MOTO [MAX. CARACTER. 10]: ");
-		modelo = cin.nextLine();
-		while(modelo.length()>10) {
-			System.out.print("**VUELVA A INGRESAR MODELO DE LA MOTO  [MAX. CARACTER. 10]**: ");
-			modelo = cin.nextLine();
-		}
-		setModelo(modelo);
-		System.out.print("INGRESA EL NUMERO DE LA PLACA DE LA MOTO [CARACTER. 7]: ");
-		numPlaca = cin.nextLine();
-		while(numPlaca.length()!=7) {
-			System.out.print("**VUELVA A INGRESAR EL NUMERO DE LA PLACA DE LA MOTO [CARACTER. 7]**: ");
-
 import java.util.Scanner;
 import java.io.IOException;
 import java.io.BufferedReader;
