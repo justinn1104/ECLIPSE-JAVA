@@ -2,6 +2,8 @@ package SistemaParquin;
 import java.util.Scanner;
 public abstract class ParqueaderoGrupoF {
 	static Scanner cin = new Scanner(System.in); 
+	static ParqueaderoGrupoF moto = new MotoGrupoF("","","","","","","");
+	static ParqueaderoGrupoF auto = new AutoGrupoF("","","","","","","");
 	private int cantidadPisos=2, cantidadBloques=15;
 	protected int dd, mm, yy, horas, minutos;
 	protected String tipoVeiculo, fechaHora, espacioSelecc, numPlaca, nombreUser,telefono, direccion;//atributos comunes
@@ -15,7 +17,6 @@ public abstract class ParqueaderoGrupoF {
 		this.nombreUser = nombreUser;
 		this.telefono = telefono;
 		this.direccion = direccion;
-
 	}
 	public int getCantidadPisos() {
 		return cantidadPisos;
@@ -129,5 +130,29 @@ public abstract class ParqueaderoGrupoF {
 	public String getBloque() {
 		return  bloque;
 	}
-	
+	public void MenuSystemParquin() {
+		int opMenuGf;
+		System.out.println("**SISTEMA DE PARQUEDERO M&M 24H**");
+		System.out.println("\n\t[1] REGISTRAR INGRESO - CREA&LEE -  CSVV&JSON");
+		System.out.println("\t[2] REGISTRAR SALIDA - CREA&LEE -  CSVV&JSON");
+		System.out.println("\t[3] SALIR");
+		System.out.print("\nSELECCIONA UNA OPCION [1 AL 3] :");
+		opMenuGf = cin.nextInt();
+		switch(opMenuGf) {
+		case 1:
+			moto.GenerarTiket();
+			auto.GenerarTiket();
+			MenuSystemParquin();
+			break;
+		case 2:
+			MenuSystemParquin();
+			break;
+		case 3:
+			System.out.println("**SISTEMA CERRADO**");
+			break;
+		default:
+			System.out.println("**VUELVA A SELECCIONAR UNA OPCION**");
+			MenuSystemParquin();
+		}
+	}	
 }
