@@ -1,4 +1,5 @@
 package SistemaParquin;
+
 import java.util.Scanner;
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -47,7 +48,7 @@ public class AutoGrupoF extends ParqueaderoGrupoF {
         String datos = nombreUser + "," + tipo + "," + modelo + "," + numPlaca + "," + telefono + "," + direccion + "," + fechaHora + "," + espacioSelecc;
         datosAuto.add(datos);
         System.out.println("\nCREACION DEL ARCHIVO .CSV\n");
-        try (FileWriter fileCsv = new FileWriter("TiketAuto.csv", true)) {
+        try (FileWriter fileCsv = new FileWriter(numPlaca+".csv", true)) {
             for (String data : datosAuto) {
                 fileCsv.write(data + "\n");
             }
@@ -64,7 +65,6 @@ public class AutoGrupoF extends ParqueaderoGrupoF {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         System.out.println("\nCREACION DEL ARCHIVO .JSON\n");
         for (String data : datosAuto) {
             String[] parts = data.split(",");
@@ -85,27 +85,8 @@ public class AutoGrupoF extends ParqueaderoGrupoF {
                 e.printStackTrace();
             }
         }
-        /*
-        System.out.println("\nCREACION DEL ARCHIVO .JSON\n");
-		JSONObject jsonobject = new JSONObject();
-		jsonobject.put("Vehiculo: ",tipo);
-		jsonobject.put("Nombre de usuario: ",nombreUser);
-		jsonobject.put("Modelo: ",modelo);
-		jsonobject.put("Numero de placa: ",numPlaca);
-		jsonobject.put("Telefono: ",telefono);
-		jsonobject.put("Direccion: ",direccion);
-		jsonobject.put("Fecha y hora : ",fechaHora);
-		jsonobject.put("Espacion seleccionado: ",espacioSelecc);
-		try (FileWriter filejson = new FileWriter (numPlaca+".json")){
-			filejson.write(jsonobject.toString());
-			System.out.println("\n \n**DATOS DE LA MOTO GURDADOS CON EXITO EN EL ARCHIVO 'TiketMoto.json'**\n");
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-        */
-        
         System.out.println("\nLECTURA DEL ARCHIVO .JSON\n");
-        try (BufferedReader fileReader = new BufferedReader(new FileReader("TiketAuto.json"))) {
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(numPlaca+".json"))) {
             String line;
             while((line = fileReader.readLine()) != null) {
                 JSONObject jsonReader = new JSONObject(new JSONTokener(line));
