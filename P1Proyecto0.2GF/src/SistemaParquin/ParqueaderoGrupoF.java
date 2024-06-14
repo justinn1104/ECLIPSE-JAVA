@@ -1,51 +1,95 @@
 package SistemaParquin;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 public abstract class ParqueaderoGrupoF {
     static Scanner cin = new Scanner(System.in); 
-    static ParqueaderoGrupoF moto = new MotoGrupoF("","","","","","","","");
-    static ParqueaderoGrupoF auto = new AutoGrupoF("","","","","","","","");
+    static ParqueaderoGrupoF moto = new MotoGrupoF("","","","","","","","","");
+    static ParqueaderoGrupoF auto = new AutoGrupoF("","","","","","","","","");
+    static ArrayList<ParqueaderoGrupoF> datosVehiculos = new ArrayList<>();
     private int cantidadPisos = 2, cantidadBloques = 15;
     protected int dd, mm, yy, horas, minutos;
     
-    protected String tipoVeiculo, fechaHora, espacioSelecc, numPlaca, nombreUser, telefono, direccion; // atributos comunes
+    protected String tipoVeiculo, espacioSelecc, numPlaca, nombreUser, telefono, direccion, fechaIngreso, fechaSalida; // atributos comunes
     protected String modelo, line, piso, bloque, tipo;
     protected int pisoSeleccion, bloqueSeleccion;
     private String[][] espacios = new String[2][15];
     
-    public ParqueaderoGrupoF(String tipoVeiculo, String fechaHora, String espacioSelecc, String numPlaca, String nombreUser, String telefono, String direccion, String tipo) {
+    public ParqueaderoGrupoF(String tipoVeiculo, String espacioSelecc, String numPlaca, String nombreUser, String telefono, String direccion, String tipo, String fechaIngreso, String fechaSalida) {
         this.tipoVeiculo = tipoVeiculo;
-        this.fechaHora = fechaHora;
         this.espacioSelecc =  espacioSelecc;
         this.numPlaca = numPlaca;
         this.nombreUser = nombreUser;
         this.telefono = telefono;
         this.direccion = direccion;
         this.tipo = tipo;
-        /*for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 15; j++) {
-                espacios[i][j] = "libre";
-            }
-        }*/
-    }
-    public int getCantidadPisos() {
-        return cantidadPisos;
-    }
-    public int getCantidadBloques() {
-        return cantidadBloques;
-    }
-    public String getFechaHora() {
-        return fechaHora;
-    }
-    public void setFechaHora(String fechaHora) {
-        this.fechaHora = fechaHora;
+        this.fechaIngreso = fechaIngreso;
+        this.fechaSalida = fechaSalida;
     }
     public abstract void GenerarTiket();
+    public void MenuSystemParquin() {
+        int opMenuGf;
+        while (true) {
+            System.out.println("\t**SISTEMA DE PARQUEDERO M&M 24H**");
+            System.out.println("\n\t[1] INGRESO VEHICULO - CREA&LEE - CSV&JSON");
+            System.out.println("\t[2] SALIDA VEHICULO - CREA&LEE - CSV&JSON");
+            System.out.println("\t[3] CONSULTAR VEHICULO - LEE - CSV&JSON ");
+            System.out.println("\t[4] INPRIMIR TODOS LOS INGRESOS ACTIVOS");
+            System.out.println("\t[5] SALIR");
+            System.out.print("\nSELECCIONA UNA OPCION [1 AL 4]: ");
+            opMenuGf = cin.nextInt();
+            cin.nextLine();  // consume newline
+            switch (opMenuGf) {
+                case 1:
+                    IngresoVeiculos();
+                    break;
+                case 2:
+                	RealizarSalida();
+                    // Implementar la función de salida de vehículos si es necesario
+                    break;
+                case 3:
+                    consultarVehiculo();
+                    break;
+                case 4:
+                	imprimirDatosVehiculos();
+                    break;          
+                case 5:
+                    System.out.println("**SISTEMA CERRADO**");
+                    return;  // Exit the loop and terminate the program
+                default:
+                    System.out.println("**VUELVA A SELECCIONAR UNA OPCION**");
+            }
+        }
+    }
+    public void IngresoVeiculos() {
+        int opMenuGf;
+        do {
+            System.out.println("\n\t**INGRESO DE VEHICULOS**");
+            System.out.println("\t[1] MOTO");
+            System.out.println("\t[2] AUTO");
+            System.out.println("\t[3] REGRESAR");
+            System.out.print("\n\nSELECCIONA EL TIPO DEL VEHICULO: ");
+            opMenuGf = cin.nextInt();
+            cin.nextLine();  // consume newline
+            switch (opMenuGf) {
+	            case 1:
+	                moto.GenerarTiket();
+	                break;
+	            case 2:
+	                auto.GenerarTiket();
+	                break;
+	            case 3:
+	                System.out.println("**REGRESASTE AL MENU PRINCIPAL**");
+	                break;
+	            default:
+	                System.out.println("**OPCION INCORRECTA**");
+	        }
+        } while (opMenuGf != 3);
+    }
     public String generarEspacio() {
         System.out.print("SELECCIONA UN PISO [1 AL 2]: ");
         pisoSeleccion = cin.nextInt();
@@ -69,7 +113,7 @@ public abstract class ParqueaderoGrupoF {
         return piso + bloque;
     }
     public String generarIngreso(int dd, int mm, int yy, int hora, int minutos) {
-        String dd2, mm2, yy2, hora3, minutos2;
+        String dd2, mm2, yy2, hora3, minutos2, form;
         System.out.print("INGRESA EL AÑO [2024]: ");
         yy = cin.nextInt();
         while (yy != 2024) {
@@ -125,59 +169,20 @@ public abstract class ParqueaderoGrupoF {
         yy2 = Integer.toString(yy);
         hora3 = Integer.toString(hora);
         minutos2 = Integer.toString(minutos);
-        return dd2 + "/" + mm2 + "/" + yy2 + " -  " + hora3 + ":" + minutos2;
-    }
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-    public void setPiso(String line) {
-        this.line = line;
-    }
-    public void setBloque(String bloque) {
-        this.modelo = bloque;
-    }
-    public String getModelo() {
-        return modelo;
-    }
-    public String getPiso() {
-        return line;
-    }
-    public String getBloque() {
-        return bloque;
-    }
-    public void setEspacio(String espacio, int a, int b) {
-        this.espacios[a][b] = espacio;
-    }
-    public void MenuSystemParquin() {
-        int opMenuGf;
-        while (true) {
-            System.out.println("\t**SISTEMA DE PARQUEDERO M&M 24H**");
-            System.out.println("\n\t[1] INGRESO VEHICULO - CREA&LEE - CSV&JSON");
-            System.out.println("\t[2] SALIDA VEHICULO - CREA&LEE - CSV&JSON");
-            System.out.println("\t[3] CONSULTAR VEHICULO - LEE - CSV&JSON ");
-            System.out.println("\t[4] SALIR");
-            System.out.print("\nSELECCIONA UNA OPCION [1 AL 4]: ");
-            opMenuGf = cin.nextInt();
-            cin.nextLine();  // consume newline
-
-            switch (opMenuGf) {
-                case 1:
-                    IngresoVeiculos();
-                    break;
-                case 2:
-                	RealizarSalida();
-                    // Implementar la función de salida de vehículos si es necesario
-                    break;
-                case 3:
-                    consultarVehiculo();
-                    break;
-                case 4:
-                    System.out.println("**SISTEMA CERRADO**");
-                    return;  // Exit the loop and terminate the program
-                default:
-                    System.out.println("**VUELVA A SELECCIONAR UNA OPCION**");
-            }
+        if(dd<10) {
+        	dd2="0".concat(dd2);
         }
+        if(mm<10) {
+        	mm2="0".concat(mm2);
+        }
+        if(hora<10) {
+        	hora3="0".concat(hora3);
+        }
+        if(minutos<10) {
+        	minutos2="0".concat(minutos2);
+        }
+        form = dd2.concat("/").concat(mm2).concat("/").concat(yy2).concat(" - ").concat(hora3).concat(":").concat(minutos2);
+        return form;
     }
     public void consultarVehiculo() {
         String placa;
@@ -226,36 +231,11 @@ public abstract class ParqueaderoGrupoF {
             }
         }
     }
-    public void IngresoVeiculos() {
-        int opMenuGf;
-        do {
-            System.out.println("\n\t**INGRESO DE VEHICULOS**");
-            System.out.println("\n\t[1] MOTO");
-            System.out.println("\n\t[2] AUTO");
-            System.out.println("\n\t[3] REGRESAR");
-            System.out.print("\n\nSELECCIONA EL TIPO DEL VEHICULO: ");
-            opMenuGf = cin.nextInt();
-            cin.nextLine();  // consume newline
-            switch (opMenuGf) {
-                case 1:
-                    moto.GenerarTiket();
-                    break;
-                case 2:
-                    auto.GenerarTiket();
-                    break;
-                case 3:
-                    System.out.println("**REGRESASTE AL MENU PRINCIPAL**");
-                    break;
-                default:
-                    System.out.println("**OPCION INCORRECTA**");
-            }
-        } while (opMenuGf != 3);
-    }
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
     public void RealizarSalida() {
-        String placa;
+        String placa, fechaIngreso = null;
+        if (datosVehiculos.isEmpty()) {
+            System.out.println("El listado de vehículos está vacío.");
+        }
         System.out.print("INGRESA EL NUMERO DE LA PLACA VEHICULAR [6 A 7 DIGITOS]: ");
         placa = cin.nextLine();
         while(placa.length() < 6 || placa.length() > 7) {
@@ -263,60 +243,119 @@ public abstract class ParqueaderoGrupoF {
             placa = cin.nextLine();
         }
         placa = placa.toLowerCase();
-        
-        // Realizar salida en CSV
-        try (BufferedReader leerCsv = new BufferedReader(new FileReader(placa + ".csv"))) {
-            String line;
-            while ((line = leerCsv.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-        	System.out.println("El archivo CSV no existe.");
-            System.out.print("¿Desea volver a intentar la lectura? (si/no): ");
-            String respuesta = cin.nextLine().toLowerCase();
-            if (respuesta.equals("si")) {
-                RealizarSalida(); // Llama recursivamente al método si el usuario desea volver a intentarlo
-            } else {
-                return; // Sale del método si el usuario no desea volver a intentarlo
+        for (int i = 0; i < datosVehiculos.size(); i++) {
+            ParqueaderoGrupoF vehiculo = datosVehiculos.get(i);
+            if (vehiculo.getNumPlaca().equals(placa)) {
+                fechaIngreso = vehiculo.getFechaIngreso();
+                //datosVehiculos.remove(i);
+                break;
             }
         }
-
-        // Realizar salida en JSON
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(placa + ".json"))) {
-            String line;
-            while ((line = fileReader.readLine()) != null) {
-                JSONObject jsonReader = new JSONObject(new JSONTokener(line));
-                System.out.println("Vehiculo: " + jsonReader.getString("Vehiculo"));
-                System.out.println("Nombre de usuario: " + jsonReader.getString("Nombre de usuario"));
-                System.out.println("Modelo: " + jsonReader.getString("Modelo"));
-                System.out.println("Numero de placa: " + jsonReader.getString("Numero de placa"));
-                System.out.println("Telefono: " + jsonReader.getString("Telefono"));
-                System.out.println("Direccion: " + jsonReader.getString("Direccion"));
-                System.out.println("Fecha y hora: " + jsonReader.getString("Fecha y hora"));
-                System.out.println("Espacio seleccionado: " + jsonReader.getString("Espacio seleccionado"));
-            }
-        } catch (IOException e) {
-        	System.out.println("El archivo JSON no existe.");
-            System.out.print("¿Desea volver a intentar la lectura? (si/no): ");
-            String respuesta = cin.nextLine().toLowerCase();
-            if (respuesta.equals("si")) {
-                RealizarSalida(); // Llama recursivamente al método si el usuario desea volver a intentarlo
-            } else {
-                return; // Sale del método si el usuario no desea volver a intentarlo
-            }
+        if (fechaIngreso == null) {
+            System.out.println("Vehículo con placa " + placa + " no encontrado.");
         }
-
-        // Eliminar archivos CSV y JSON
+        System.out.println("INGRESA LA FECHA DE SALIDA: ");
+        fechaSalida = generarIngreso(dd, mm, yy, horas, minutos);
+    }
+    public int descomponerFecha(String fecha, int indexIni, int indexFin) {
         try {
-            FileWriter fileCsv = new FileWriter(placa + ".csv");
-            fileCsv.close();
-            System.out.println("ARCHIVO '" + placa + ".csv' ELIMINADO EXITOSAMENTE");
-
-            FileWriter fileJson = new FileWriter(placa + ".json");
-            fileJson.close();
-            System.out.println("ARCHIVO '" + placa + ".json' ELIMINADO EXITOSAMENTE");
-        } catch (IOException e) {
-            e.printStackTrace();
+            String formCadena = fecha.substring(indexIni, indexFin);
+            int formInteger = Integer.parseInt(formCadena);
+            System.out.println(formInteger); // Output = 25
+            return formInteger;
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace();
+            return -1;
         }
     }
-}
+    // Método para imprimir todos los elementos del ArrayList
+    public void imprimirDatosVehiculos() {
+    	if (datosVehiculos.isEmpty()) {
+            System.out.println("El listado de vehículos está vacío.");
+            return;
+        }
+
+        System.out.println("Listado de vehículos:");
+        for (ParqueaderoGrupoF vehiculo : datosVehiculos) {
+            System.out.println("PLACA: "+vehiculo.getNumPlaca());
+            System.out.println("NOMBRE: "+vehiculo.getNombreUser());
+            System.out.println("INGRESO: "+vehiculo.getFechaIngreso());
+            System.out.println("SALIDA: "+vehiculo.getFechaSalida()+"\n\n");
+        }
+    }
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+    public void setPiso(String line) {
+        this.line = line;
+    }
+    public void setBloque(String bloque) {
+        this.modelo = bloque;
+    }
+    public String getModelo() {
+        return modelo;
+    }
+    public String getPiso() {
+        return line;
+    }
+    public String getBloque() {
+        return bloque;
+    }
+    public void setEspacio(String espacio, int a, int b) {
+        this.espacios[a][b] = espacio;
+    }
+    public String getEspacioSelecc() {
+		return espacioSelecc;
+	}
+	public void setEspacioSelecc(String espacioSelecc) {
+		this.espacioSelecc = espacioSelecc;
+	}
+	public String getNumPlaca() {
+		return numPlaca;
+	}
+	public void setNumPlaca(String numPlaca) {
+		this.numPlaca = numPlaca;
+	}
+	public String getNombreUser() {
+		return nombreUser;
+	}
+	public void setNombreUser(String nombreUser) {
+		this.nombreUser = nombreUser;
+	}
+	public String getTelefono() {
+		return telefono;
+	}
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+	public String getFechaIngreso() {
+		return fechaIngreso;
+	}
+	public void setFechaIngreso(String fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
+	}
+	public String getFechaSalida() {
+		return fechaSalida;
+	}
+	public void setFechaSalida(String fechaSalida) {
+		this.fechaSalida = fechaSalida;
+	}
+	public int getPisoSeleccion() {
+		return pisoSeleccion;
+	}
+	public void setPisoSeleccion(int pisoSeleccion) {
+		this.pisoSeleccion = pisoSeleccion;
+	}
+	public String getTipo() {
+		return tipo;
+	}
+	public int getCantidadPisos() {
+        return cantidadPisos;
+    }
+    public int getCantidadBloques() {
+        return cantidadBloques;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
