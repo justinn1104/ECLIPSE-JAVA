@@ -1,23 +1,17 @@
 package SistemaParquin;
-
 import java.util.Scanner;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.FileReader;
-import java.util.ArrayList;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 public class AutoGrupoF extends ParqueaderoGrupoF {
     static Scanner cin = new Scanner(System.in);
-    static ArrayList<String> datosAuto = new ArrayList<>();
     private double precio;
-
-    public AutoGrupoF(String tipoVeiculo, String fechaHora, String espacioSelecc, String numPlaca, String nombreUser, String telefono, String direccion, String tipo) {
-        super(tipoVeiculo, fechaHora, espacioSelecc, numPlaca, nombreUser, telefono, direccion, tipo);
+    public AutoGrupoF(String tipoVeiculo, String espacioSelecc, String numPlaca, String nombreUser, String telefono, String direccion, String tipo, String fechaIngreso, String fechaSalida) {
+        super(tipoVeiculo, espacioSelecc, numPlaca, nombreUser, telefono, direccion, tipo, fechaIngreso, fechaSalida);
     }
-
     @Override
     public void GenerarTiket() {
         setTipo("auto");
@@ -44,18 +38,16 @@ public class AutoGrupoF extends ParqueaderoGrupoF {
             System.out.print("VUELVA A INGRESAR LA DIRECCION DEL USUARIO [MAX. CARACTER. 10]: ");
             direccion = cin.nextLine();
         }
-        System.out.print("INGRESA EL PRECIO: ");
-        precio = cin.nextDouble();
-        cin.nextLine(); // Consume newline left-over
-        fechaHora = generarIngreso(dd, mm, yy, horas, minutos);
+        
+        fechaIngreso = generarIngreso(dd, mm, yy, horas, minutos);
+        System.out.println("longitud: "+fechaIngreso.length());	
         espacioSelecc = generarEspacio();
-        String datos = nombreUser + "," + tipo + "," + modelo + "," + numPlaca + "," + telefono + "," + direccion + "," + fechaHora + "," + espacioSelecc + "," + precio;
-        datosAuto.add(datos);
+        datosVehiculos.add(new AutoGrupoF(tipoVeiculo, espacioSelecc, numPlaca, nombreUser, telefono, direccion, tipo, fechaIngreso, fechaSalida));
         System.out.println("\nCREACION DEL ARCHIVO .CSV\n");
         try (FileWriter fileCsv = new FileWriter(numPlaca + ".csv", true)) {
-            for (String data : datosAuto) {
-                fileCsv.write(data + "\n");
-            }
+        	String datos = nombreUser + "," + tipo + "," + modelo + "," + numPlaca + "," + telefono + "," + direccion + "," + espacioSelecc + "," + precio;
+        	fileCsv.write(datos);
+        	fileCsv.close();
             System.out.println("\n*DATOS DEL AUTO GUARDADOS CON EXITO EN EL ARCHIVO 'TiketAuto.csv'*\n");
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,25 +62,20 @@ public class AutoGrupoF extends ParqueaderoGrupoF {
             e.printStackTrace();
         }
         System.out.println("\nCREACION DEL ARCHIVO .JSON\n");
-        for (String data : datosAuto) {
-            String[] parts = data.split(",");
-            JSONObject jsonobject = new JSONObject();
-            jsonobject.put("Vehiculo", parts[1]);
-            jsonobject.put("Nombre de usuario", parts[0]);
-            jsonobject.put("Modelo", parts[2]);
-            jsonobject.put("Numero de placa", parts[3]);
-            jsonobject.put("Telefono", parts[4]);
-            jsonobject.put("Direccion", parts[5]);
-            jsonobject.put("Fecha y hora", parts[6]);
-            jsonobject.put("Espacio seleccionado", parts[7]);
-            jsonobject.put("Precio", parts[8]);
-
-            try (FileWriter filejson = new FileWriter(numPlaca + ".json", true)) {
-                filejson.write(jsonobject.toString() + "\n");
-                System.out.println("\n*DATOS DEL AUTO GUARDADOS CON EXITO EN EL ARCHIVO 'TiketAuto.json'*\n");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        JSONObject jsonobject = new JSONObject();
+        jsonobject.put("Vehiculo", tipo);
+        jsonobject.put("Nombre de usuario", nombreUser);
+        jsonobject.put("Modelo", modelo);
+        jsonobject.put("Numero de placa", numPlaca);
+        jsonobject.put("Telefono", telefono);
+        jsonobject.put("Direccion", direccion);
+        jsonobject.put("Fecha y hora ingreso", fechaIngreso);
+        jsonobject.put("Espacio seleccionado", espacioSelecc);
+        try (FileWriter filejson = new FileWriter(numPlaca + ".json", true)) {
+            filejson.write(jsonobject.toString() + "\n");
+            System.out.println("\n*DATOS DEL AUTO GUARDADOS CON EXITO EN EL ARCHIVO 'TiketAuto.json'*\n");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         System.out.println("\nLECTURA DEL ARCHIVO .JSON\n");
         try (BufferedReader fileReader = new BufferedReader(new FileReader(numPlaca + ".json"))) {
@@ -101,9 +88,8 @@ public class AutoGrupoF extends ParqueaderoGrupoF {
                 System.out.println("Numero de placa: " + jsonReader.getString("Numero de placa"));
                 System.out.println("Telefono: " + jsonReader.getString("Telefono"));
                 System.out.println("Direccion: " + jsonReader.getString("Direccion"));
-                System.out.println("Fecha y hora: " + jsonReader.getString("Fecha y hora"));
+                System.out.println("Fecha y hora ingreso: " + jsonReader.getString("Fecha y hora ingreso"));
                 System.out.println("Espacio seleccionado: " + jsonReader.getString("Espacio seleccionado"));
-                System.out.println("Precio: " + jsonReader.getDouble("Precio"));
             }
         } catch (IOException e) {
             e.printStackTrace();
